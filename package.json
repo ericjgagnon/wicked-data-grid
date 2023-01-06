@@ -1,0 +1,37 @@
+{
+  "name": "wicked-data-grid",
+  "version": "0.0.0",
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/wicked-data-grid.umd.js",
+  "module": "./dist/wicked-data-grid.es.js",
+  "exports": {
+    ".": {
+      "import": "./dist/wicked-data-grid.es.js",
+      "require": "./dist/wicked-data-grid.umd.js"
+    }
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "vitest run --config vite.config.js --passWithNoTests"
+  },
+  "devDependencies": {
+    "@types/chance": "^1.1.3",
+    "@typescript-eslint/eslint-plugin": "^5.46.1",
+    "@typescript-eslint/parser": "^5.46.1",
+    "chance": "^1.1.9",
+    "csstype": "^3.1.1",
+    "eslint": "^8.30.0",
+    "jsdom": "^20.0.3",
+    "prettier": "^2.8.1",
+    "typescript": "^4.9.3",
+    "vite": "^4.0.0",
+    "vitest": "^0.25.8"
+  },
+  "dependencies": {
+    "@types/node": "^18.7.8"
+  }
+}

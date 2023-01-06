@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Wicked DataGrid</title>
+    <style>
+      html, body {
+        height: 100%;
+        width: 100%;
+      }
+
+      body {
+        margin: 0;
+      }
+
+      #app {
+        position: relative;
+        height: 100%;
+      }
+
+      #grid-container {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <div id="grid-container"></div>
+      <div id="grid-container2"></div>
+    </div>
+    <script type="module">
+      import './node_modules/chance/chance.js';
+      import DataGrid, {ColumnDataType}  from './src/main';
+
+      const dataSize = 1000;
+      const chance = new Chance();
+      const countries = Array.from(Array(100), () => chance.country({ full: true }));
+      const columns = [
+        {
+          columnKey: 'name',
+          label: 'Name',
+          dataType: ColumnDataType.text,
+          editable: true,
+          filterable: true,
+        },
+        {
+          columnKey: 'status',
+          label: 'Status',
+          dataType: ColumnDataType.select,
+          editable: true,
+          filterable: true,
+        },
+        {
+          columnKey: 'country',
+          label: 'Country',
+          width: '150px',
+          dataType: ColumnDataType.select,
+          options: countries.map((country) => [country, country]),
+          multiple: true,
+          editable: true,
+          filterable: true,
+        },
+        {
+          columnKey: 'inNato',
+          label: 'In NATO',
+          width: '200px',
+          dataType: ColumnDataType.boolean,
+          defaultValue: 'No',
+          options: [
+            ['Yes', 'Yes'],
+            ['No', 'No'],
+          ],
+          editable: true,
+          filterable: true,
+        },
+      ];
+
+      // min and max included
+      function randomIntFromInterval(min, max) {
+        return Math.floor(Math.random() * (max - min + 1) + min);
+      }
+
+      const data = Array.from(Array(dataSize), (_, rowIndex) => {
+        const rowIndexString = String(rowIndex);
+        const activeOption = ['Active', 'Active'];
+        const inactiveOption = ['Inactive', 'Inactive'];
+        return {
+          name: {
+            columnKey: 'name',
+            value: chance.name(),
+            rowIndex: rowIndexString,
+          },
+          status: {
+            columnKey: 'status',
+            value: randomIntFromInterval(0, 1) === 0 ? 'Inactive' : 'Active',
+            options: [activeOption, inactiveOption],
+            rowIndex: rowIndexString,
+          },
+          country: {
+            columnKey: 'country',
+            value: chance.pickone(countries),
+            rowIndex: rowIndexString,
+          },
+          inNato: {
+            columnKey: 'inNato',
+            value: null,
+            rowIndex: rowIndexString,
+          },
+        };
+      });
+
+      const dataGrid = new DataGrid({
+        columns,
+        data,
+        theme: { gridHeight: '500px' },
+      });
+      const container = document.getElementById('grid-container');
+      container.appendChild(dataGrid);
+
+      const container2 = document.getElementById('grid-container2');
+      const dataGrid2 = new DataGrid({
+        columns,
+        data,
+        theme: { gridHeight: '500px'}
+      })
+      container2.appendChild(dataGrid2)
+    </script>
+  </body>
+</html>
